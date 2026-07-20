@@ -14,10 +14,10 @@ const AppState = {
     dateRange: '30'
   },
   csvUrls: {
-    dashboardCSV: '',
-    paymentCSV: '',
-    metaCSV: '',
-    marketingCSV: ''
+    dashboardCSV: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZI9D3IMZQDw8Hbj_bUEh4lm8Lz8fSijp0UGeDc2IX4bM9meDEIE6FIHTjO3zxw52An93N0wiP53Ph/pub?gid=0&single=true&output=csv',
+    paymentCSV: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZI9D3IMZQDw8Hbj_bUEh4lm8Lz8fSijp0UGeDc2IX4bM9meDEIE6FIHTjO3zxw52An93N0wiP53Ph/pub?gid=1883774701&single=true&output=csv',
+    metaCSV: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZI9D3IMZQDw8Hbj_bUEh4lm8Lz8fSijp0UGeDc2IX4bM9meDEIE6FIHTjO3zxw52An93N0wiP53Ph/pub?gid=1927841194&single=true&output=csv',
+    marketingCSV: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZI9D3IMZQDw8Hbj_bUEh4lm8Lz8fSijp0UGeDc2IX4bM9meDEIE6FIHTjO3zxw52An93N0wiP53Ph/pub?gid=1181563723&single=true&output=csv'
   },
   charts: {}
 };
