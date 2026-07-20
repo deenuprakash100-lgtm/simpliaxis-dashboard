@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simpliaxis - SA Executive BI Dashboard</title>
+  
+  <!-- Fonts & Icon Libraries -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Visualization Engines -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  
+  <!-- Custom Application Stylesheet -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div id="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <i class="fas fa-chart-line" style="color: var(--accent-blue);"></i>
+        <span>Simpliaxis</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="nav-item active" data-module="dashboard"><i class="fas fa-home"></i> Executive Overview</a>
+        <a class="nav-item" data-module="payments"><i class="fas fa-credit-card"></i> Payment Tracker</a>
+        <a class="nav-item" data-module="leads"><i class="fas fa-filter"></i> Multi-Channel Leads</a>
+        <a class="nav-item" data-module="marketing"><i class="fas fa-bullhorn"></i> Marketing ROAS</a>
+        <a class="nav-item" data-module="premium"><i class="fas fa-crown"></i> Premium & Elite</a>
+        <a class="nav-item" data-module="refunds"><i class="fas fa-undo-alt"></i> Refund Tracker</a>
+        <a class="nav-item" data-module="ai-insights"><i class="fas fa-robot"></i> AI Predictive Engine</a>
+      </nav>
+    </aside>
+
+    <!-- Sticky Navigation Header -->
+    <header class="sticky-header">
+      <div class="header-left">
+        <span class="brand-title" id="currentModuleTitle">EXECUTIVE OVERVIEW</span>
+        <div class="live-badge">
+          <span class="pulse-dot"></span> LIVE SYNC
+        </div>
+      </div>
+      <div class="header-right">
+        <span style="font-size: 0.85rem; color: var(--text-secondary);"><i class="far fa-clock"></i> <span id="liveClock">--:--:--</span></span>
+        <button class="header-btn" onclick="document.getElementById('configModal').classList.add('active')"><i class="fas fa-cog"></i> Google Sheets Config</button>
+        <button class="header-btn" onclick="exportDashboardData('csv')"><i class="fas fa-download"></i> Export</button>
+        <button class="header-btn" id="themeToggleBtn"><i class="fas fa-sun"></i></button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+      
+      <!-- Interactive Global Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label>Region</label>
+          <select class="filter-control" id="regionFilter">
+            <option value="ALL">Global (All Regions)</option>
+            <option value="USA">USA</option>
+            <option value="India">India</option>
+            <option value="APAC">APAC</option>
+            <option value="MENA">MENA</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Course</label>
+          <select class="filter-control" id="courseFilter">
+            <option value="ALL">All Courses</option>
+            <option value="PMP">PMP Certification</option>
+            <option value="CSM">Certified Scrum Master</option>
+            <option value="ITIL">ITIL v4 Foundation</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Timeframe</label>
+          <select class="filter-control" id="timeframeFilter">
+            <option value="30">Last 30 Days</option>
+            <option value="90">Last Quarter</option>
+            <option value="365">Year to Date</option>
+          </select>
+        </div>
+        <div style="margin-left: auto; font-size: 0.75rem; color: var(--text-muted);">
+          Last Synced: <span id="lastRefreshTime">Just Now</span>
+        </div>
+      </div>
+
+      <!-- Real-Time Metric KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>Total Revenue</span>
+            <i class="fas fa-dollar-sign" style="color: var(--accent-emerald);"></i>
+          </div>
+          <div class="kpi-value">$2,845,000</div>
+          <div class="kpi-footer trend-up">
+            <i class="fas fa-arrow-up"></i> +14.2% vs last month
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>Total Leads</span>
+            <i class="fas fa-users" style="color: var(--accent-blue);"></i>
+          </div>
+          <div class="kpi-value">12,480</div>
+          <div class="kpi-footer trend-up">
+            <i class="fas fa-arrow-up"></i> +8.6% vs last month
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>Conversion Rate</span>
+            <i class="fas fa-percentage" style="color: var(--accent-purple);"></i>
+          </div>
+          <div class="kpi-value">30.6%</div>
+          <div class="kpi-footer trend-up">
+            <i class="fas fa-arrow-up"></i> +2.1% improvement
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>Avg Deal Value</span>
+            <i class="fas fa-tags" style="color: var(--accent-amber);"></i>
+          </div>
+          <div class="kpi-value">$744.76</div>
+          <div class="kpi-footer trend-down">
+            <i class="fas fa-arrow-down"></i> -0.4% vs last month
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart Visualizations -->
+      <div class="chart-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3 style="font-size: 1rem; font-weight: 600;">Revenue & Predictive Forecast</h3>
+            <i class="fas fa-chart-line" style="color: var(--text-muted);"></i>
+          </div>
+          <div class="chart-container">
+            <canvas id="revenueTrendChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3 style="font-size: 1rem; font-weight: 600;">Geographic Market Breakdown</h3>
+            <i class="fas fa-globe" style="color: var(--text-muted);"></i>
+          </div>
+          <div class="chart-container">
+            <canvas id="regionDistChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Google Sheets Integration Modal -->
+  <div class="modal-backdrop" id="configModal">
+    <div class="modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 style="font-weight: 700;"><i class="fas fa-link" style="color: var(--accent-blue);"></i> Google Sheets CSV Binding</h3>
+        <button onclick="document.getElementById('configModal').classList.remove('active')" style="background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1.2rem;"><i class="fas fa-times"></i></button>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Paste your Published CSV Google Sheet URLs below for dynamic live data synchronization.</p>
+      <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+        <div>
+          <label style="font-size: 0.75rem; color: var(--text-muted);">Executive Dashboard CSV URL</label>
+          <input type="text" class="filter-control" style="width: 100%; margin-top: 0.2rem;" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv">
+        </div>
+        <div>
+          <label style="font-size: 0.75rem; color: var(--text-muted);">Payment Tracker CSV URL</label>
+          <input type="text" class="filter-control" style="width: 100%; margin-top: 0.2rem;" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv">
+        </div>
+        <div>
+          <label style="font-size: 0.75rem; color: var(--text-muted);">Marketing Campaigns CSV URL</label>
+          <input type="text" class="filter-control" style="width: 100%; margin-top: 0.2rem;" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv">
+        </div>
+        <button class="header-btn" style="background: var(--accent-blue); color: white; justify-content: center; margin-top: 0.5rem;" onclick="document.getElementById('configModal').classList.remove('active')"><i class="fas fa-save"></i> Save & Connect</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Logic Controller -->
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
